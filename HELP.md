@@ -1,16 +1,32 @@
 # Getting Started
 
+/***MONGODB***/
+sc.exe create MongoDB binPath= "\"C:\Users\nandan.kelkar\Desktop\Work\Database\mongodb_installation\bin\mongod.exe\" --service --config "mongod.cfg" DisplayName= "MongoDB" start= "auto"
+
+/**Mongo DB Config*****
+
+systemLog:
+    destination: file
+    path: C:\Users\nandan.kelkar\Desktop\Work\Database\test\mongodb\log\mongod.log
+storage:
+    dbPath: C:\Users\nandan.kelkar\Desktop\Work\Database\test\mongodb\db
+**************/
+
+db.createCollection("user")  
+db.createCollection("applicationUser")  
+
+db.users.insert({"id": 1, "name": "test user1","email": "test_user1@test.com","phonenumber": "123456789"})
+
+db.applicationUser.insert({"username":"vivacredit","password":"demopassword"})
+
+Check application.properties.
+
+
+
+
+
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-
-### Guides
-The following guides illustrate how to use some features concretely:
-
-* [Building a RESTful Web Service with Spring Boot Actuator](https://spring.io/guides/gs/actuator-service/)
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-* [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
-* [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
-* [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
-
