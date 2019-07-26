@@ -1,0 +1,138 @@
+{
+	"variables": [],
+	"info": {
+		"name": "VivaCreditDemo",
+		"_postman_id": "f2d43e10-960b-6d94-0f79-fef3cbc20be9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"request": {
+				"url": "http://localhost:8099/users/",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXZhY3JlZGl0MTExIiwiZXhwIjoxNTY1MDE4NzUzfQ.LtZrapwoWq7o-WtRRqrzlamaPthK3dirADy4PHoOd2f6jFXRjuPMUKHWFjgn4vMEz_ipR6HL45nDtDBkTTJKxQ",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post",
+			"request": {
+				"url": "http://localhost:8099/users/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aXZhY3JlZGl0MTExIiwiZXhwIjoxNTY1MDE4NzUzfQ.LtZrapwoWq7o-WtRRqrzlamaPthK3dirADy4PHoOd2f6jFXRjuPMUKHWFjgn4vMEz_ipR6HL45nDtDBkTTJKxQ",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\": 3, \"name\": \"test user3\",\"email\": \"test_user3@test.com\",\"phoneNumber\": \"333356789\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "sign-up",
+			"request": {
+				"url": "http://localhost:8099/users/sign-up",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"vivacredit111\",\n\t\"password\":\"demopassword1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"url": "http://localhost:8099/login",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"vivacredit111\",\n\t\"password\":\"demopassword1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put",
+			"request": {
+				"url": "http://localhost:8099/users/4",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\": 4, \"name\": \"test user4\",\"email\": \"test_user4@test.com\",\"phoneNumber\": \"423456789\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"url": "http://localhost:8099/users/5d36608cc57769a4d9dd7437",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

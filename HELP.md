@@ -22,8 +22,7 @@ db.applicationUser.insert({"username":"vivacredit","password":"demopassword"})
 Check application.properties.
 
 
-
-
+Refer : VivaCreditDemo.postman_collection.json
 
 
 ### Reference Documentation
