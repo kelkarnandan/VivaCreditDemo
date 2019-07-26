@@ -15,6 +15,8 @@ db.users.insert({"id": 1, "name": "test user1","email": "test_user1@test.com","p
 
 db.applicationUser.insert({"username":"vivacredit","password":"demopassword"})
 
+Also same can be setup using /sign-up post method
+
 /Other Config/
 Check application.properties.
 
