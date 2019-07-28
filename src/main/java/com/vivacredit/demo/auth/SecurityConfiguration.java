@@ -1,5 +1,9 @@
 package com.vivacredit.demo.auth;
 
+import static com.vivacredit.demo.auth.jwt.util.JwtSecurityConstants.SIGN_UP_URL;
+
+import javax.ws.rs.HttpMethod;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,13 +14,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vivacredit.demo.auth.jwt.config.JwtAuthenticationFilter;
 import com.vivacredit.demo.auth.jwt.config.JwtAuthorizationFilter;
 import com.vivacredit.demo.auth.jwt.util.JwtTokenUtil;
-import com.vivacredit.demo.service.ApplicationUserDetailsService;
 
 /**
  * SecurityConfiguration
@@ -27,11 +31,11 @@ import com.vivacredit.demo.service.ApplicationUserDetailsService;
 @Configuration
 @EnableConfigurationProperties
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    ApplicationUserDetailsService applicationUserDetailsService;
+    UserDetailsService userService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -41,10 +45,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // configure AuthenticationManager so that it knows from where to load
         // user for matching credentials
         // Use BCryptPasswordEncoder
-        auth.userDetailsService(applicationUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
-    @Bean
+    @Bean(name = "bCryptPasswordEncoder")
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -59,15 +63,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // .antMatchers(HttpMethod.POST, SIGN_UP_URL)
         // .permitAll()
-        http.csrf().disable().authorizeRequests().anyRequest().authenticated().and()
+        http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SIGN_UP_URL)
+                .permitAll().and().authorizeRequests().anyRequest().authenticated().and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtTokenUtil,
-                        applicationUserDetailsService));
+                        userService));
+        // http.csrf().disable().authorizeRequests()
+        // .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+        // .anyRequest().authenticated().and()
+        // .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+        // .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtTokenUtil,
+        // applicationUserDetailsService));
+
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(applicationUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
 }

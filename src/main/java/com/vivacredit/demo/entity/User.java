@@ -1,5 +1,10 @@
 package com.vivacredit.demo.entity;
 
+import java.util.Set;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,12 +14,21 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Indexed(unique = true)
     private String name;
+    private String username;
+    private String password;
+
     private String email;
     @Field("phonenumber")
     private String phoneNumber;
+
+    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @JoinTable(name = "ROLE", joinColumns = {
+    // @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
+    private Set<Role> roles;
 
     /**
      * @return The id
@@ -70,6 +84,48 @@ public class User {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return The username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username The username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @return The password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password The password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return The roles
+     */
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    /**
+     * @param roles The roles to set
+     */
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
 }

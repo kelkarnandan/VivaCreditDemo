@@ -1,19 +1,26 @@
 package com.vivacredit.demo.controller;
 
-import com.vivacredit.demo.auth.ApplicationUser;
-import com.vivacredit.demo.entity.User;
-import com.vivacredit.demo.repository.ApplicationUserRepository;
-import com.vivacredit.demo.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.ws.rs.Produces;
-import java.util.List;
-import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.vivacredit.demo.entity.User;
+import com.vivacredit.demo.service.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -22,54 +29,53 @@ public class UserController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private ApplicationUserRepository applicationUserRepository;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    //Skipping Service layer
-
     @Autowired
-    private UserRepository repository;
+    private UserService userService;
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody ApplicationUser user) {
+    public void signUp(@RequestBody User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        applicationUserRepository.save(user);
+        userService.save(user);
     }
 
     @GetMapping(value = "/")
     @Produces("application/json")
+    @Secured({ "ROLE_ADMIN" })
     public List<User> getAllUsers() {
-        return repository.findAll();
+        return userService.findAll();
     }
 
     @GetMapping(value = "/{id}")
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     public User getUserById(@PathVariable("id") String id) {
         LOG.info("getting user.");
-        return repository.findById(id).orElse(null);
+        return userService.findById(id);
     }
 
     @PutMapping(value = "/{id}")
+    @Secured({ "ROLE_USER" })
     public void updateUserById(@PathVariable("id") String id, @Valid @RequestBody User user) {
         LOG.info("Updating user.");
         user.setId(id);
-        repository.save(user);
+        userService.save(user);
     }
 
     @PostMapping(value = "/create")
     @Produces("application/json")
-    public User addNewUsers(@RequestBody User user) {
+    public User addNewUser(@RequestBody User user) {
         LOG.info("Saving user.");
-        return repository.save(user);
+        return userService.save(user);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteBoss(@PathVariable String id) {
+    @Secured({ "ROLE_ADMIN" })
+    public void deleteUser(@PathVariable String id) {
         LOG.info("Deleting user.");
-        Optional<User> optionalUser = repository.findById(id);
-        if (optionalUser.isPresent()) {
-            repository.delete(optionalUser.get());
+        User user = userService.findById(id);
+        if (user != null) {
+            userService.delete(user.getId());
         }
     }
 }

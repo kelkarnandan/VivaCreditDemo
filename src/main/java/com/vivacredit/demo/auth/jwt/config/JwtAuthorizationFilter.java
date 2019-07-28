@@ -11,25 +11,25 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.vivacredit.demo.auth.jwt.util.JwtTokenUtil;
-import com.vivacredit.demo.service.ApplicationUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private ApplicationUserDetailsService applicationUserDetailsService;
+    private UserDetailsService userService;
 
     private JwtTokenUtil jwtTokenUtil;
 
     public JwtAuthorizationFilter(AuthenticationManager authManager, JwtTokenUtil jwtTokenUtil,
-            ApplicationUserDetailsService applicationUserDetailsService) {
+            UserDetailsService userService) {
         super(authManager);
         this.jwtTokenUtil = jwtTokenUtil;
-        this.applicationUserDetailsService = applicationUserDetailsService;
+        this.userService = userService;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 System.out.println("Unable to get JWT Token");
             }
             catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                throw new ServletException("Token expired, please login in again");
             }
         }
         else {
@@ -57,7 +57,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = applicationUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userService.loadUserByUsername(username);
             // if token is valid configure Spring Security to manually set
             // authentication
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {

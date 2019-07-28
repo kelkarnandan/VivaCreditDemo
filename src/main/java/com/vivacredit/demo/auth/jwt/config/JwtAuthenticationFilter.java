@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vivacredit.demo.auth.ApplicationUser;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,8 +36,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException {
         try {
-            ApplicationUser creds = new ObjectMapper().readValue(req.getInputStream(),
-                    ApplicationUser.class);
+            com.vivacredit.demo.entity.User creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), com.vivacredit.demo.entity.User.class);
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     creds.getUsername(), creds.getPassword(), new ArrayList<>()));
         }
