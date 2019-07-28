@@ -11,7 +11,7 @@ systemLog: destination: file path: C:\Users\nandan.kelkar\Desktop\Work\Database\
 db.createCollection("user")
 db.createCollection("applicationUser")
 
-db.users.insert({"id": 1, "name": "test user1","email": "test_user1@test.com","phonenumber": "123456789"})
+db.users.insert({"id": 1, "name": "test user1","email": "test_user1@test.com","phonenumber": "123456789","roles": [{"id": 0,"name": "ADMIN","description": "Admin Role"}]})
 
 db.applicationUser.insert({"username":"vivacredit","password":"demopassword"})
 
