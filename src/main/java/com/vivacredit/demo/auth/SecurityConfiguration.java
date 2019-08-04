@@ -1,6 +1,6 @@
 package com.vivacredit.demo.auth;
 
-import static com.vivacredit.demo.auth.jwt.util.JwtSecurityConstants.SIGN_UP_URL;
+import static com.vivacredit.demo.auth.jwt.util.JwtSecurityConstants.*;
 
 import javax.ws.rs.HttpMethod;
 
@@ -14,10 +14,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.vivacredit.demo.auth.jwt.config.JwtAuthenticationEntryPoint;
 import com.vivacredit.demo.auth.jwt.config.JwtAuthenticationFilter;
 import com.vivacredit.demo.auth.jwt.config.JwtAuthorizationFilter;
 import com.vivacredit.demo.auth.jwt.util.JwtTokenUtil;
@@ -39,6 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -63,8 +68,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // .antMatchers(HttpMethod.POST, SIGN_UP_URL)
         // .permitAll()
-        http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SIGN_UP_URL)
-                .permitAll().and().authorizeRequests().anyRequest().authenticated().and()
+        http.cors().and().csrf().disable().exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler).and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll().and().authorizeRequests()
+                .antMatchers(HttpMethod.POST, LOGIN_URL).permitAll().and().authorizeRequests()
+                .antMatchers(HttpMethod.POST, AUTHENTICATE_URL).permitAll().and()
+                .authorizeRequests().anyRequest().authenticated().and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtTokenUtil,
                         userService));

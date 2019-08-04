@@ -17,7 +17,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Indexed(unique = true)
-    private String name;
+    @Field("firstname")
+    private String firstName;
+    @Field("lastname")
+    private String lastName;
     private String username;
     private String password;
 
@@ -45,17 +48,31 @@ public class User {
     }
 
     /**
-     * @return The name
+     * @return The firstName
      */
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
     /**
-     * @param name The name to set
+     * @param name The firstName to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        firstName = name;
+    }
+
+    /**
+     * @return The lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName The lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**
