@@ -17,9 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Indexed(unique = true)
-    @Field("firstname")
     private String firstName;
-    @Field("lastname")
     private String lastName;
     private String username;
     private String password;

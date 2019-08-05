@@ -78,12 +78,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtTokenUtil,
                         userService));
-        // http.csrf().disable().authorizeRequests()
-        // .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-        // .anyRequest().authenticated().and()
-        // .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-        // .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtTokenUtil,
-        // applicationUserDetailsService));
 
     }
 

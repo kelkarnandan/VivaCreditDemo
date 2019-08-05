@@ -74,14 +74,6 @@ public class UserController {
         userService.save(user);
     }
 
-    // @PostMapping(value = "/create")
-    // @Produces("application/json")
-    // public User addNewUser(@RequestBody User user) {
-    // LOG.info("Saving user.");
-    // user.setRoles(defaultRole());
-    // return userService.save(user);
-    // }
-
     @DeleteMapping(value = "/{id}")
     @Secured({ ROLE_ADMIN })
     public void deleteUser(@PathVariable String id) {

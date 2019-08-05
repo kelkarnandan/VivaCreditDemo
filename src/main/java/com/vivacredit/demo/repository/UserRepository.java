@@ -8,7 +8,5 @@ import com.vivacredit.demo.entity.User;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
-    User findFirstByName(String name);
-
     User findByUsername(String username);
 }
