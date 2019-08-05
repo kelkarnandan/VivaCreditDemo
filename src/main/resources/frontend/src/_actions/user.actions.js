@@ -17,13 +17,13 @@ function login(username, password) {
 
         userService.login(username, password)
             .then(
-                user => { 
+                user => {
                     dispatch(success(user));
                     history.push('/');
                 },
                 error => {
-                    dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
                 }
             );
     };
@@ -44,14 +44,14 @@ function register(user) {
 
         userService.register(user)
             .then(
-                user => { 
+                user => {
                     dispatch(success());
                     history.push('/login');
                     dispatch(alertActions.success('Registration successful'));
                 },
                 error => {
-                    dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
                 }
             );
     };
@@ -65,10 +65,11 @@ function getAll() {
     return dispatch => {
         dispatch(request());
 
+        // check admin and then call below service
         userService.getAll()
             .then(
                 users => dispatch(success(users)),
-                error => dispatch(failure(error.toString()))
+                error => dispatch(failure(error))
             );
     };
 
@@ -84,8 +85,12 @@ function _delete(id) {
 
         userService.delete(id)
             .then(
-                user => dispatch(success(id)),
-                error => dispatch(failure(id, error.toString()))
+                user => {
+                    dispatch(success(id));
+                },
+                error => {
+                    dispatch(failure(id, error));
+                }
             );
     };
 
