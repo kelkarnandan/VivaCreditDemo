@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vivacredit.demo.auth.jwt.request.JwtRequest;
 import com.vivacredit.demo.auth.jwt.response.JwtResponse;
 import com.vivacredit.demo.auth.jwt.util.JwtTokenUtil;
+import com.vivacredit.demo.entity.UserPrincipal;
 
 /**
  * JwtAuthenticationController
@@ -44,7 +45,7 @@ public class JwtAuthenticationController {
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtResponse((UserPrincipal) userDetails, token));
     }
 
     private void authenticate(String username, String password) throws Exception {
